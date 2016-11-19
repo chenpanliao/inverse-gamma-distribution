@@ -35,7 +35,6 @@ fluidPage(
         'Degree of belief parameter (nu) = α * 2',
         as.character(c(
           # sprintf("%1.6f", 0.000002),
-          sprintf("%1.5f", 0.00002),
           sprintf("%1.4f", 0.0002),
           0.002,
           0.02,
@@ -45,15 +44,17 @@ fluidPage(
           5,
           10,
           20,
-          100
+          100,
+          200,
+          500
         )),
         selected = 0.2
       ),
       sliderInput(
         "xmax",
         "Maximal x-axis value",
-        min = -5,
-        max = 7,
+        min = -6,
+        max = 8,
         value = 1,
         step = 1,
         pre = "10 ^ (",
