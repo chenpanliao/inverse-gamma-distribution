@@ -49,20 +49,20 @@ fluidPage(
           200,
           500
         )),
-        selected = 1
+        selected = 0.02
       ),
       sliderInput(
         "xmax",
         "Maximal x-axis value",
         min = -2,
-        max = 6,
+        max = 8,
         value = 1,
-        step = 1,
+        step = 0.2,
         pre = "10 ^ (",
         post = ")",
         sep = ""
       )
     ),
-    mainPanel(plotOutput('distPlot', height = "500px"))
+    mainPanel(plotOutput('distPlot', height = "600px"))
   )
 )

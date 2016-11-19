@@ -19,7 +19,7 @@ function(input, output) {
     beta <- as.numeric(input$V) * as.numeric(input$nu) / 2
     x.mode <- beta / (1 + alpha)
     xmax <- 10 ^ as.numeric(input$xmax)
-    xseq <- seq(.Machine$double.eps, xmax, length.out = 1000)
+    xseq <- seq(.Machine$double.eps, xmax, length.out = 2000)
     # 若選擇的 x 範圍包括峰值位置則強制加入峰值位置
     if (x.mode <= max(xseq)) {
       xseq <-
@@ -31,7 +31,7 @@ function(input, output) {
     DV.cdf <- invgamma::pinvgamma(xseq, shape = alpha, rate = beta)
     y.tick <- pretty(DV.pdf)
     ylim.max <- y.tick %>% .[length(.)]
-    cex.val <- 16 / 12
+    cex.val <- 15 / 12
     col.axis4 <- 2
     par(
       las = 1,
