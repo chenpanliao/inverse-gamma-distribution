@@ -4,7 +4,6 @@
 # http://shiny.rstudio.com
 #
 
-
 # invgamma::dinvgamma(1:5, shape = 2, rate = 4)
 # same
 # MCMCpack::dinvgamma(1:5, shape = 2, scale = 4)
@@ -12,45 +11,54 @@
 
 library(shiny)
 library(invgamma)
-# require(MCMCpack)
 
 function(input, output) {
   output$distPlot <- renderPlot({
     alpha <- as.numeric(input$nu) / 2
     beta <- as.numeric(input$V) * as.numeric(input$nu) / 2
     xmax <- 10 ^ as.numeric(input$xmax)
-    xseq <- seq(0.00000001, xmax, length.out = 5000)
+    xseq <- seq(.Machine$double.eps, xmax, length.out = 20000)
     DV.pdf <- invgamma::dinvgamma(xseq, shape = alpha, rate = beta)
-    # DV.cdf <- cumsum(DV.pdf) * (xseq[2] - xseq[1])
     DV.cdf <- invgamma::pinvgamma(xseq, shape = alpha, rate = beta)
-    par(mfrow = c(2, 1), las = 1)
+    y.tick <- pretty(DV.pdf)
+    ylim.max <- y.tick[length(y.tick)]
+    cex.val <- 16 / 12
+    col.axis4 <- 2
+    par(
+      las = 1,
+      mar = c(2, 5, 4, 5),
+      cex = cex.val,
+      mgp = c(4, 1, 0)
+    )
     plot(
       DV.pdf ~ xseq,
       type = "l",
       xlab = "x",
-      ylab = "",
-      ylim = c(0, max(DV.pdf)),
+      ylab = "Probability density",
+      ylim = c(0, ylim.max),
       main = paste0(
-        "PDF of inverse-gamma distribution (α = ",
+        "PDF/CDF of inverse-gamma distribution (α = ",
         alpha,
         ", β = ",
         beta,
         ")"
       )
     )
-    plot(
-      DV.cdf ~ xseq,
-      type = "l",
-      xlab = "x",
-      ylab = "",
-      ylim = c(0, 1),
-      main = paste0(
-        "CDF of inverse-gamma distribution (α = ",
-        alpha,
-        ", β = ",
-        beta,
-        ")"
-      )
+    axis(
+      4,
+      seq(0, ylim.max, length = 6),
+      seq(0, 1, length = 6),
+      col = 2,
+      col.axis = 2
+    )
+    lines(xseq, DV.cdf * ylim.max, col = col.axis4)
+    par(las = 3)
+    mtext(
+      "Cumulative probability",
+      4,
+      cex = cex.val,
+      line = 4,
+      col = col.axis4
     )
   })
 }

@@ -39,6 +39,7 @@ fluidPage(
           0.002,
           0.02,
           0.2,
+          0.4,
           1,
           2,
           5,
@@ -53,8 +54,8 @@ fluidPage(
       sliderInput(
         "xmax",
         "Maximal x-axis value",
-        min = -6,
-        max = 8,
+        min = -3,
+        max = 5,
         value = 1,
         step = 1,
         pre = "10 ^ (",
@@ -62,6 +63,6 @@ fluidPage(
         sep = ""
       )
     ),
-    mainPanel(plotOutput('distPlot', height = "700px"))
+    mainPanel(plotOutput('distPlot', height = "500px"))
   )
 )
