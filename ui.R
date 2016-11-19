@@ -49,13 +49,13 @@ fluidPage(
           200,
           500
         )),
-        selected = 0.2
+        selected = 1
       ),
       sliderInput(
         "xmax",
         "Maximal x-axis value",
-        min = -3,
-        max = 5,
+        min = -2,
+        max = 6,
         value = 1,
         step = 1,
         pre = "10 ^ (",

@@ -11,17 +11,26 @@
 
 library(shiny)
 library(invgamma)
+library(magrittr)
 
 function(input, output) {
   output$distPlot <- renderPlot({
     alpha <- as.numeric(input$nu) / 2
     beta <- as.numeric(input$V) * as.numeric(input$nu) / 2
+    x.mode <- beta / (1 + alpha)
     xmax <- 10 ^ as.numeric(input$xmax)
-    xseq <- seq(.Machine$double.eps, xmax, length.out = 20000)
+    xseq <- seq(.Machine$double.eps, xmax, length.out = 1000)
+    # 若選擇的 x 範圍包括峰值位置則強制加入峰值位置
+    if (x.mode <= max(xseq)) {
+      xseq <-
+        xseq %>%
+        c(., x.mode) %>%
+        sort
+    }
     DV.pdf <- invgamma::dinvgamma(xseq, shape = alpha, rate = beta)
     DV.cdf <- invgamma::pinvgamma(xseq, shape = alpha, rate = beta)
     y.tick <- pretty(DV.pdf)
-    ylim.max <- y.tick[length(y.tick)]
+    ylim.max <- y.tick %>% .[length(.)]
     cex.val <- 16 / 12
     col.axis4 <- 2
     par(
