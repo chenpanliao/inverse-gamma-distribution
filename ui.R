@@ -13,56 +13,39 @@ library(shiny)
 
 
 
-fluidPage(
-  titlePanel(
-    "Inverse Gamma Distribution"
-  ),
-  sidebarLayout(
-    sidebarPanel(
-      helpText(
-        HTML(
-          "<p>This Shiny app provide the visualized PDF/CDF of inverse gamma distribution, which is used for prior of G-/R- structure for MCMCglmm users. See <a href = 'https://en.wikipedia.org/wiki/Inverse-gamma_distribution'>Inverse Gamma Distribution @ Wikipedia</a> to know the details.</p><p>Auther: Chen-Pan Liao <code>andrew.43@gmail.com</code></p>"
-        )
-      ),
-      selectInput(
-        'V',
-        'Expected value of variance (V) = β / α',
-        as.character(c(0.01, 0.25, 1, 4, 16, 25, 100, 225, 400, 900, 2500, 10000)),
-        selected = 1
-      ),
-      selectInput(
-        'nu',
-        'Degree of belief parameter (nu) = α * 2',
-        as.character(c(
-          # sprintf("%1.6f", 0.000002),
-          sprintf("%1.4f", 0.0002),
-          0.002,
-          0.02,
-          0.2,
-          0.4,
-          1,
-          2,
-          5,
-          10,
-          20,
-          100,
-          200,
-          500
-        )),
-        selected = 0.02
-      ),
-      sliderInput(
-        "xmax",
-        "Maximal x-axis value",
-        min = -2,
-        max = 8,
-        value = 1,
-        step = 0.2,
-        pre = "10 ^ (",
-        post = ")",
-        sep = ""
-      )
-    ),
-    mainPanel(plotOutput('distPlot', height = "600px"))
-  )
-)
+fluidPage(titlePanel("Inverse Gamma Distribution"),
+          sidebarLayout(
+            sidebarPanel(
+              helpText(
+                HTML(
+                  "<p>This Shiny app provide the visualized PDF/CDF of inverse gamma distribution, which is used for prior of G-/R- structure for MCMCglmm users. See <a href = 'https://en.wikipedia.org/wiki/Inverse-gamma_distribution'>Inverse Gamma Distribution @ Wikipedia</a> to know the details.</p><p>Auther: Chen-Pan Liao <code>andrew.43@gmail.com</code></p>"
+                )
+              ),
+              numericInput(
+                "V",
+                "Expected value of variance (V) = β / α",
+                1,
+                min = 0.00001,
+                max = 1000000
+              ),
+              numericInput(
+                "nu",
+                "Degree of belief parameter (nu) = α * 2",
+                0.02,
+                min = 0.00001,
+                max = 1000000
+              ),
+              sliderInput(
+                "xmax",
+                "Maximal x-axis value",
+                min = -2,
+                max = 8,
+                value = 1,
+                step = 0.2,
+                pre = "10 ^ (",
+                post = ")",
+                sep = ""
+              )
+            ),
+            mainPanel(plotOutput('distPlot', height = "500px"))
+          ))
