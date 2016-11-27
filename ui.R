@@ -11,8 +11,6 @@
 
 library(shiny)
 
-
-
 fluidPage(titlePanel("Inverse Gamma Distribution"),
           sidebarLayout(
             sidebarPanel(
@@ -25,23 +23,23 @@ fluidPage(titlePanel("Inverse Gamma Distribution"),
                 "V",
                 "Expected value of variance (V) = β / α",
                 1,
-                min = 0.00001,
-                max = 1000000
+                min = 0.0001,
+                max = 10000
               ),
               numericInput(
                 "nu",
                 "Degree of belief parameter (nu) = α * 2",
-                0.02,
-                min = 0.00001,
-                max = 1000000
+                1,
+                min = 0.0002,
+                max = 100
               ),
               sliderInput(
                 "xmax",
                 "Maximal x-axis value",
-                min = -2,
-                max = 8,
+                min = -4,
+                max = 9,
                 value = 1,
-                step = 0.2,
+                step = 0.1,
                 pre = "10 ^ (",
                 post = ")",
                 sep = ""

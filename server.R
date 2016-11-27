@@ -19,31 +19,25 @@ function(input, output) {
     beta <- as.numeric(input$V) * as.numeric(input$nu) / 2
     xmax <- 10 ^ as.numeric(input$xmax)
     x.mode <- beta / (1 + alpha)
-    xseq <- seq(.Machine$double.eps, xmax, length.out = 2000)
-    xseq.diff <- xseq %>% diff %>% .[1]
-    # 若選擇的 x 範圍包括峰值位置則強制加入峰值位置
-    if (x.mode <= max(xseq)) {
-      xseq <-
-        xseq %>%
-        c(., x.mode) %>%
-        # 讓峰值附近曲線精確一點
-        c(.,
-          seq(0.25 * x.mode, 1.75 * x.mode, length = 200)) %>%
-        sort
-    }
+    xseq <- 
+      seq(.Machine$double.eps, xmax, length.out = 2000) %>%
+      append(., seq(0.5 * x.mode, 1.5 * x.mode, length = 500)) %>%
+      sort %>%
+      .[which({.} <= xmax)]
     DV.pdf <- invgamma::dinvgamma(xseq, shape = alpha, rate = beta)
     DV.cdf <- invgamma::pinvgamma(xseq, shape = alpha, rate = beta)
     y.tick <- pretty(DV.pdf)
     ylim.max <- y.tick %>% .[length(.)]
-    cex.val <- 15 / 12
+    cex.val <- 16 / 12
     col.axis2 <- 4
     col.axis4 <- 2
     par(
       las = 1,
       mar = c(2, 5, 4, 5),
       cex = cex.val,
-      mgp = c(4, 1, 0),
-      yaxs = "i"
+      mgp = c(3.5, 1, 0),
+      yaxs = "i",
+      xpd = T
     )
     plot(
       NULL,
@@ -51,14 +45,19 @@ function(input, output) {
       ylab = "Probability density",
       xlim = c(0, xmax),
       ylim = c(0, ylim.max),
+      yaxt = "n"
+    )
+    title(
       main = paste0(
-        "PDF/CDF of inverse-gamma distribution (α = ",
+        "PDF/CDF of\ninverse-gamma distribution\n(α = ",
         alpha,
         ", β = ",
         beta,
         ")"
       ),
-      yaxt = "n"
+      adj = 0,
+      font.main = 1,
+      cex.main = 1
     )
     axis(2,
          y.tick,
@@ -83,7 +82,7 @@ function(input, output) {
       "Cumulative probability",
       4,
       cex = cex.val,
-      line = 4,
+      line = 3.5,
       col = col.axis4
     )
     legend(
@@ -91,7 +90,8 @@ function(input, output) {
       lwd = 3,
       lty = 1,
       col = c(col.axis2, col.axis4),
-      legend = c("PDF", "CDF")
+      legend = c("PDF", "CDF"),
+      inset = c(0, -0.17)
     )
   })
 }
